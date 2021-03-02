@@ -74,7 +74,7 @@
 
 **2.关于精确匹配算法和非精确匹配算法**
 
-参考PDF
+参考`./pdf/Exact&Inexact matching.pdf`
 
 **3.关于 *Occ/O* 辅助数据的压缩**
 
