@@ -80,4 +80,19 @@
 
 参考`./pdf/data compression.pdf`
 
-## 总结和疑惑🤔
+## 疑惑🤔
+
+1.最终得到的匹配结果是所有满足条件的结果的混合，即SNP、indel和精确匹配(此时允许有差异)。
+
+如何将这些匹配结果分开，最主要的是*插入*和*删除*很难以人的角度去辨别。
+
+当差异数相同的时候，需要对所有的匹配结果进行评分和筛选，对目前的我来说是个问题。
+
+2.***Fast and accurate short read alignment with Burrows–Wheeler transform***中认为空串的*SA interval*下限是1，即*k=1*。
+
+但是这样的结论和其他文章有出入，在实际的算法实现中认为 *k=0*。
+
+3.***Hardware-Acceleration of Short-Read Alignment Based on the Burrows-Wheeler Transform***举例*BWT*变换时，对*C*的计算有出入。
+
+算法实现的过程是按照***Fast and accurate short read alignment with Burrows–Wheeler transform***对*C*的定义计算的。
+
