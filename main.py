@@ -457,7 +457,7 @@ if __name__ == "__main__":
     print("解码结果：Occ(%s,%i)=%i" % ("t", 3, occ_reverse_compress.decode("t", 3)))
     print("原码结果：Occ(%s,%i)=%i" % ("t", 3, data.OCC("t", 3, reverse=True)))
     print("\n")
-
+    
 
 
 
