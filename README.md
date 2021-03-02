@@ -70,7 +70,7 @@
 
 **1.关于 Burrows–Wheeler transform**
 
-参考PDF
+参考`./pdf/Burrows–Wheeler transform.pdf`
 
 **2.关于精确匹配算法和非精确匹配算法**
 
