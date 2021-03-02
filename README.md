@@ -78,6 +78,6 @@
 
 **3.关于 *Occ/O* 辅助数据的压缩**
 
-参考PDF
+参考`./pdf/data compression.pdf`
 
 ## 总结和疑惑🤔
