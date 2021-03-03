@@ -27,15 +27,16 @@ import traceback
 
 # environment variables
 debug = False
-show_data_structures = True
-use_lower_bound_tree_pruning = True  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
+only_InexRecur = False  # 强制使用 InexRecur 递归过程实现精确/非精确匹配
+show_data_structures = False
+use_lower_bound_tree_pruning = False  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
 show_data_compress = False  # 是否展示数据压缩的过程
 """
-根据文章所诉，使用lower_bound可以有效减少搜索空间
+根据文章所诉，使用 lower_bound 可以有效减少搜索空间
 """
 # search parameters
-indels_allowed = True  # turn off for mismatches only, no insertion or deletions allowed
-difference_threshold = 1
+indels_allowed = True# turn off for mismatches only, no insertion or deletions allowed
+difference_threshold = 0
 insertion_penalty = 1
 deletion_penalty = 1
 mismatch_penalty = 1
@@ -45,7 +46,7 @@ use_middle_as_head_number = False  # 是否使用分块中间的条目作为标�
 
 # reference and query strings
 reference ="""CCTGAG"""
-query = "CGA"
+query = "GA"
 
 """
 A Burrows-Wheeler Alignment class
@@ -240,7 +241,12 @@ class BWA:
         :param num_differences: 最大允许的差异数（SNP，插入，删除）
         :return: 匹配的位置
         """
-        if num_differences == 0:
+        """
+        此处要说明的：
+        inexact_match 并非只能完成非精确匹配 
+        当 num_differences 为 0 也能完成精确匹配，但效率略低
+        """
+        if num_differences == 0 and not only_InexRecur:
             # 精确匹配（backward search/向后搜索）
             return self.exact_match(read)
         else:
