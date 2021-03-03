@@ -26,17 +26,18 @@ import math
 import traceback
 
 # environment variables
-debug = False
-only_InexRecur = False  # 强制使用 InexRecur 递归过程实现精确/非精确匹配
+debug = True
+only_InexRecur = True  # 强制使用 InexRecur 递归过程实现精确/非精确匹配
+use_find_match = True  # 使用 find_match 或者 find_match_2
 show_data_structures = False
-use_lower_bound_tree_pruning = False  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
+use_lower_bound_tree_pruning = True  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
 show_data_compress = False  # 是否展示数据压缩的过程
 """
 根据文章所诉，使用 lower_bound 可以有效减少搜索空间
 """
 # search parameters
 indels_allowed = True# turn off for mismatches only, no insertion or deletions allowed
-difference_threshold = 0
+difference_threshold = 1
 insertion_penalty = 1
 deletion_penalty = 1
 mismatch_penalty = 1
@@ -46,7 +47,7 @@ use_middle_as_head_number = False  # 是否使用分块中间的条目作为标�
 
 # reference and query strings
 reference ="""CCTGAG"""
-query = "GA"
+query = "CTG"
 
 """
 A Burrows-Wheeler Alignment class
@@ -63,7 +64,7 @@ class BWA:
         """
         reference = reference.lower()
 
-        rotation_list, rotation_list_reverse, suffix_array, bwt, bwt_reverse = [list() for i in range(5)]
+        rotation_list, rotation_list_reverse, suffix_array, suffix_array_reverse, bwt, bwt_reverse = [list() for i in range(6)]
         C, Occ, Occ_reverse = [dict() for i in range(3)]
         alphabet = set()  # 创建一个无序不重复元素集
         reverse_reference = reference[::-1]  # 参考基因序列的反向序列
@@ -112,8 +113,9 @@ class BWA:
             suffix_array.append(item.pos)
             bwt.append(item.text[-1:])
 
-        # 生成 BWT_reverse
+        # 生成 suffix_array_reverse 和 BWT_reverse
         for item in rotation_list_reverse:
+            suffix_array_reverse.append(item.pos)
             bwt_reverse.append(item.text[-1:])
 
         # 生成 reference 的 Occ
@@ -144,6 +146,7 @@ class BWA:
 
         # save all the useful datastructures as class variables for easy future access
         self.SA = suffix_array
+        self.SA_reverse = suffix_array_reverse
         self.BWT = bwt
         self.BWT_reverse = bwt_reverse
         self.C = C
@@ -169,6 +172,8 @@ class BWA:
     def calculated_D(self, read):
         read = read.lower()
 
+        tempset = set()
+
         k = 0
         l = self.n - 1
         z = 0
@@ -181,6 +186,10 @@ class BWA:
                 l = self.n - 1
                 z = z + 1
             self.D.append(z)
+
+        for m in range(k, l + 1):
+            tempset.add(m)
+        return tempset
 
     # 工具：获取 D 中的数值
     def get_D(self, index):
@@ -234,7 +243,17 @@ class BWA:
 
         return result
 
-    # 查找短序列在参考基因中的位置
+    def match(self, read, num_differences):
+        if use_find_match:
+            if debug:
+                print("Exact Matching + Inexact Matching\n")
+            return self.find_match(read, num_differences)
+        else:
+            if debug:
+                print("Exact Matching/Inexact Matching\n")
+            return self.find_match_2(read, num_differences)
+
+    # 查找短序列在参考基因中的位置：精确匹配 + 非精确匹配
     def find_match(self, read, num_differences):
         """
         :param read: 查找的短序列
@@ -252,6 +271,10 @@ class BWA:
         else:
             # 非精确匹配（bounded traversal/边界遍历）
             return self.inexact_match(read, num_differences)
+
+    # 查找短序列在参考基因中的位置：精确匹配/非精确匹配
+    def find_match_2(self, read, num_differences):
+        return self.all_match(read, num_differences)
 
     # 精确匹配算法
     def exact_match(self, read):
@@ -286,6 +309,36 @@ class BWA:
         self.calculated_D(read)
         SA_index = self.InexRecur(read, len(read)-1, z, 0, self.n - 1)
         return [self.SA[x] for x in SA_index]
+
+    # Exact Matching Using Reversed Reference Genome data
+    # 同时实现精确/非精确匹配
+    # 该算法的实现参考：Fast and accurate short read alignment with Burrows-Wheeler transform 中的算法2
+    def all_match(self, read, z):
+        read = read.lower()
+
+        # 计算
+        I_reverse = self.calculated_D(read)
+
+        # 判断：如果 D 所有的元素都是则可以实现精确匹配
+        sum_D = 0
+        for item in self.D:
+            sum_D = sum_D + item
+
+        if sum_D == 0:
+            # 精确匹配
+            """
+            #这里要说明一下：
+            --------------------
+            文献里这里没有减1，但是算法实现的时候需要减1，才能和另一种方法的结果吻合
+            个人猜测，可能是对参考序列长度的定义有不同，即是否包含最后的$
+            """
+            return [self.n - self.SA_reverse[x] - len(read) - 1 for x in I_reverse]
+        else:
+            # 非精确匹配
+            SA_index = self.InexRecur(read, len(read) - 1, z, 0, self.n - 1)
+            return [self.SA[x] for x in SA_index]
+
+
 """
 原文章 Hardware-Acceleration of Short-Read Alignment Based on the Burrows-Wheeler Transform
 ------------------------------------------------------------------------------------------
@@ -391,6 +444,8 @@ class Suffix:
 this is used to sort the Suffix objects, according to their text key
 """
 def textKey( a ): return a.text
+
+
 if __name__ == "__main__":
 
     time_start = time.time()  # 开始计时
@@ -423,9 +478,9 @@ if __name__ == "__main__":
         extra = " and insertions and deletions allowed"
     else:
         extra = " with no insertions or deletions allowed"
-    print("Searching for \"%s\" with max difference threshold of %d%s..." % (query, difference_threshold, extra))
+    print("Searching for \"%s\" with max difference threshold of %d%s...\n" % (query, difference_threshold, extra))
 
-    matches = data.find_match(query, difference_threshold)
+    matches = data.match(query, difference_threshold)
 
     if show_data_structures:
         if use_lower_bound_tree_pruning:
@@ -478,7 +533,7 @@ if __name__ == "__main__":
             for i in range(block_number):
                 print("code %i" % i, end=" ")
                 print(occ_reverse_compress.compressed_data[i])
-    
+
 
 
 
