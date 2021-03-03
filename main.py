@@ -27,13 +27,14 @@ import traceback
 
 # environment variables
 debug = False
-show_data_structures = False
+show_data_structures = True
 use_lower_bound_tree_pruning = True  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
+show_data_compress = False  # 是否展示数据压缩的过程
 """
 根据文章所诉，使用lower_bound可以有效减少搜索空间
 """
 # search parameters
-indels_allowed = False  # turn off for mismatches only, no insertion or deletions allowed
+indels_allowed = True  # turn off for mismatches only, no insertion or deletions allowed
 difference_threshold = 1
 insertion_penalty = 1
 deletion_penalty = 1
@@ -43,8 +44,8 @@ block_number = 2  # 分成的块数，按照文章所述的内容，仅仅分成
 use_middle_as_head_number = False  # 是否使用分块中间的条目作为标头，否就用第一个条目
 
 # reference and query strings
-reference ="""gattcggattcggtgt"""
-query = "ttc"
+reference ="""CCTGAG"""
+query = "CGA"
 
 """
 A Burrows-Wheeler Alignment class
@@ -150,6 +151,7 @@ class BWA:
         self.n = len(reference)  # 参考基因组序列长度
         self.D = list()  # lower bound on the number of differences
         self.alphabet = alphabet
+        self.InexRecur_parameter_list = []  # 递归调用 InexRecur 过程中的参数列表
 
     # 工具：计算 Occ(a,i) 和 Occ_reverse(a,i) 的值，通过 reverse 判断 Occ 还是 Occ_reverse
     # 注意：Occ(a,-1) = 0
@@ -189,6 +191,8 @@ class BWA:
     # 工具：非精确搜索的递归函数
     def InexRecur(self, read, i, z, k, l):
         tempset = set()
+
+        self.InexRecur_parameter_list.append([i, z, k, l])
 
         # 两个递归的中止条件
         # stop1：允许的差异数过少，无法满足匹配要求，即 z < D(i)
@@ -276,7 +280,6 @@ class BWA:
         self.calculated_D(read)
         SA_index = self.InexRecur(read, len(read)-1, z, 0, self.n - 1)
         return [self.SA[x] for x in SA_index]
-
 """
 原文章 Hardware-Acceleration of Short-Read Alignment Based on the Burrows-Wheeler Transform
 ------------------------------------------------------------------------------------------
@@ -369,9 +372,6 @@ class OCC_COMPRESS:
                 if i == char: count = count + 1
 
             return count
-
-
-
 """
 A simple class with 2 variables, used for sorting and calculating the Suffix Array and BWT array
 Each instance holds the position of the suffix and the suffix (text) itself
@@ -423,11 +423,12 @@ if __name__ == "__main__":
 
     matches = data.find_match(query, difference_threshold)
 
-    if show_data_structures and use_lower_bound_tree_pruning:
-        print("\nD array:", end=" ")
-        print(data.D)
-    else:
-        print("\nThere is no calculation about the D array for a query")
+    if show_data_structures:
+        if use_lower_bound_tree_pruning:
+            print("\nD array:", end=" ")
+            print(data.D)
+        else:
+            print("\nThere is no calculation about the D array for a query")
 
     print("\n%d match(es) at position(s): %s \n\n" % (len(matches), matches))
 
@@ -436,27 +437,43 @@ if __name__ == "__main__":
     time_c = time_end - time_start  # 运行所花时间
     print('耗时:', time_c, 's\n')
 
-    # 展示对 Occ 的压缩和解码
-    occ_compress = OCC_COMPRESS(data.Occ, data.BWT)
-
-    print("针对Occ的实验比对")
-    print("解码结果：Occ(%s,%i)=%i" % ("t", 16, occ_compress.decode("t", 16)))
-    print("原码结果：Occ(%s,%i)=%i" % ("t", 16, data.OCC("t", 16)))
-    print("\n")
-
     if show_data_structures:
-        print('压缩后的Occ')
-        for i in range(block_number):
-            print("code %i" % i, end=" ")
-            print(occ_compress.compressed_data[i])
+        print("展示 InexRecur 递归调用过程中的参数:")
+        print("index  i   z   k   l")
+        print("-----  -   -   -   -")
+        index = 1
+        for item in data.InexRecur_parameter_list:
+            print("%3d  %3d %3d %3d %3d" % (index, item[0], item[1], item[2], item[3]))
+            index = index + 1
+        print("\n")
 
+    if show_data_compress:
+        # 展示对 Occ 的压缩和解码
+        occ_compress = OCC_COMPRESS(data.Occ, data.BWT)
 
-    occ_reverse_compress = OCC_COMPRESS(data.Occ_reverse, data.BWT_reverse)
+        print("\n针对 Occ 压缩解码的实验比对")
+        print("解码结果：Occ(%s,%i)=%i" % ("t", 16, occ_compress.decode("t", 16)))
+        print("原码结果：Occ(%s,%i)=%i\n" % ("t", 16, data.OCC("t", 16)))
 
-    print("针对Occ_reverse的实验比对")
-    print("解码结果：Occ(%s,%i)=%i" % ("t", 3, occ_reverse_compress.decode("t", 3)))
-    print("原码结果：Occ(%s,%i)=%i" % ("t", 3, data.OCC("t", 3, reverse=True)))
-    print("\n")
+        # 展示 Occ 压缩数据
+        if show_data_structures:
+            print('压缩后的Occ')
+            for i in range(block_number):
+                print("code %i" % i, end=" ")
+                print(occ_compress.compressed_data[i])
+
+        occ_reverse_compress = OCC_COMPRESS(data.Occ_reverse, data.BWT_reverse)
+
+        print("\n针对 Occ_reverse 压缩解码的实验比对")
+        print("解码结果：Occ(%s,%i)=%i" % ("t", 3, occ_reverse_compress.decode("t", 3)))
+        print("原码结果：Occ(%s,%i)=%i\n" % ("t", 3, data.OCC("t", 3, reverse=True)))
+
+        # 展示 Occ_reverse 压缩数据
+        if show_data_structures:
+            print('压缩后的Occ_reverse')
+            for i in range(block_number):
+                print("code %i" % i, end=" ")
+                print(occ_reverse_compress.compressed_data[i])
     
 
 
