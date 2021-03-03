@@ -385,8 +385,6 @@ class Suffix:
 this is used to sort the Suffix objects, according to their text key
 """
 def textKey( a ): return a.text
-
-
 if __name__ == "__main__":
 
     time_start = time.time()  # 开始计时
