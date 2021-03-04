@@ -78,8 +78,10 @@
 `def get_D(self, index) # 获取 D 的数值 `
 
 `def InexRecur(self, read, i, z, k, l) #非精确搜索中使用的递归函数`
+
 <br/>
 <br/>
+
 按照参考文献1，分别实现的精确匹配和非精确匹配 ，即`def exact_match(self, read)`和`def inexact_match(self, read, z)`。
 
 将两个匹配算法封装在一起，即`def find_match(self, read, num_differences)`。
@@ -89,8 +91,10 @@
 环境参数`only_InexRecur`的设定可以强制使用非精确匹配算法实现精确匹配，显然此时`z=0`。
 
 `def find_match(self, read, num_differences)`可以认为是**精确匹配 + 非精确匹配**。
+
 <br/>
 <br/>
+
 按照参考文献2中提及的算法2，同时实现精确匹配和非精确匹配，即`def all_match(self, read, z)`。
 
 将此算法再次封装，即`def find_match_2(self, read, num_differences)`。
@@ -98,8 +102,10 @@
 对于该方法来说，可以实现精确匹配就不考虑非精确匹配。
 
 `def find_match_2(self, read, num_differences)`可以认为是**精确/非精确匹配**。
+
 <br/>
 <br/>
+
 `def find_match(...)`和``def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
 
 环境参数`use_find_match`的设定选择使用`def find_match(...)`或者`def find_match_2(...)`。
@@ -111,8 +117,10 @@
 `def __init__(self, Occ, bwt_str) # 接受 Occ 和 bwt_string 实现数据的压缩`
 
 `def decode(self, char, index) # 对数据进行解码，获取 Occ(a,i) 的值 `
+
 <br/>
 <br/>
+
 根据参考文献的表述，数据进行压缩的时候可使用不同的 *entry* 作为 *head*。
 
 环境参数 `use_middle_as_head_number` 设定是否使用每个 *block* 中间的 *entry* 作为 *head*，否的话就是使用第一个 *entry*。
