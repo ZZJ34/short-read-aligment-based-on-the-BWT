@@ -79,7 +79,7 @@
 
 `def InexRecur(self, read, i, z, k, l) #非精确搜索中使用的递归函数`
 
-
+<br/>
 
 按照参考文献1，分别实现的精确匹配和非精确匹配 ，即`def exact_match(self, read)`和`def inexact_match(self, read, z)`。
 
