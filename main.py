@@ -468,11 +468,11 @@ if __name__ == "__main__":
             print(str, end="  ")
             print(data.Occ[str])
         print("\n")
-        # print("Occ_reverse(a,i) is the number of occurances of the character 'a' in BWT_reverse[0,i]")
-        # for str in data.alphabet:
-        #     print(str, end="  ")
-        #     print(data.Occ_reverse[str])
-        # print("\n")
+        print("Occ_reverse(a,i) is the number of occurances of the character 'a' in BWT_reverse[0,i]")
+        for str in data.alphabet:
+            print(str, end="  ")
+            print(data.Occ_reverse[str])
+        print("\n")
 
     if indels_allowed:
         extra = " and insertions and deletions allowed"
