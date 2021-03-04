@@ -106,7 +106,7 @@
 <br/>
 <br/>
 
-`def find_match(...)`和``def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
+`def find_match(...)`和`def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
 
 环境参数`use_find_match`的设定选择使用`def find_match(...)`或者`def find_match_2(...)`。
 
