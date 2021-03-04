@@ -67,13 +67,13 @@
 
 `def OCC(self, char, index, reverse=False) # 获取计算 Occ(a,i) 和 Occ_reverse(a,i) 的值`
 
-  这里值得注意的是：*Occ(a,-1) = 0*
+ &nbsp 这里值得注意的是：*Occ(a,-1) = 0*
 
-  参数`reverse`判断是  *Occ(a,i)*  还是 *Occ_reverse(a,i)*
+ &nbsp 参数`reverse`判断是  *Occ(a,i)*  还是 *Occ_reverse(a,i)*
 
 `def calculated_D(self, read) # 计算短序列的 D，用于修建遍历树并提升搜寻的速度`
 
-  *D* 的存在可以大幅度缩小便利空间的范围
+ &nbsp *D* 的存在可以大幅度缩小便利空间的范围
 
 `def get_D(self, index) # 获取 D 的数值 `
 
