@@ -88,7 +88,7 @@
 
 根据参数`num_differences`判断使用精确还是非精确匹配，显然`num_differences=0`时使用精确匹配。
 
-环境参数`only_InexRecur`的设定可以强制使用非精确匹配算法实现精确匹配，显然此时`z=0`。
+环境参数`only_InexRecur`可以强制使用非精确匹配算法实现精确匹配，显然此时`z=0`。
 
 `def find_match(self, read, num_differences)`可以认为是**精确匹配 + 非精确匹配**。
 
@@ -108,7 +108,7 @@
 
 `def find_match(...)`和`def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
 
-环境参数`use_find_match`的设定选择使用`def find_match(...)`或者`def find_match_2(...)`。
+环境参数`use_find_match`选择使用`def find_match(...)`还是`def find_match_2(...)`。
 
 ### **2.Class OCC_COMPRESS 实现相关数据的压缩**
 
