@@ -149,11 +149,15 @@
 
 ## 疑惑🤔
 
-1.最终得到的匹配结果是所有满足条件的结果的混合，即SNP、indel和精确匹配(此时允许有差异)。
+1.（不完满的解决）最终得到的匹配结果是所有满足条件的结果的混合，即SNP、indel和精确匹配(此时允许有差异)。
 
 如何将这些匹配结果分开，最主要的是*插入*和*删除*很难以人的角度去辨别。
 
 当差异数相同的时候，需要对所有的匹配结果进行评分和筛选，对目前的我来说是个问题。
+
+使用全局规划的动态算法实现了CIGAR串的生成（但是效果一般），具体的参考`./my-aligner-tools`
+
+原作者：https://github.com/isovic/cigargen
 
 2.***Fast and accurate short read alignment with Burrows–Wheeler transform***中认为空串的*SA interval*下限是1，即*k=1*。
 
