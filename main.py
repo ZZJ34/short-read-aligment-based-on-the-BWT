@@ -26,9 +26,9 @@ import math
 import traceback
 
 # environment variables
-debug = True
-only_InexRecur = True  # 强制使用 InexRecur 递归过程实现精确/非精确匹配
-use_find_match = True  # 使用 find_match 或者 find_match_2
+debug = False
+only_InexRecur = False  # 强制使用 InexRecur 递归过程实现精确/非精确匹配
+use_find_match = True # 使用 find_match 或者 find_match_2
 show_data_structures = False
 use_lower_bound_tree_pruning = True  # set this to false (in conjunction with debug=True) to see the full search through the suffix trie
 show_data_compress = False  # 是否展示数据压缩的过程
@@ -36,8 +36,8 @@ show_data_compress = False  # 是否展示数据压缩的过程
 根据文章所诉，使用 lower_bound 可以有效减少搜索空间
 """
 # search parameters
-indels_allowed = True# turn off for mismatches only, no insertion or deletions allowed
-difference_threshold = 1
+indels_allowed = True # turn off for mismatches only, no insertion or deletions allowed
+difference_threshold = 0
 insertion_penalty = 1
 deletion_penalty = 1
 mismatch_penalty = 1
@@ -46,8 +46,8 @@ block_number = 2  # 分成的块数，按照文章所述的内容，仅仅分成
 use_middle_as_head_number = False  # 是否使用分块中间的条目作为标头，否就用第一个条目
 
 # reference and query strings
-reference ="""CCTGAG"""
-query = "CTG"
+reference ="""ACTGCTGCCTGCAAAAAAAAAAA"""
+query = "GCTGCCTG"
 
 """
 A Burrows-Wheeler Alignment class
@@ -533,17 +533,6 @@ if __name__ == "__main__":
             for i in range(block_number):
                 print("code %i" % i, end=" ")
                 print(occ_reverse_compress.compressed_data[i])
-
-
-
-
-
-
-
-
-
-
-
 
 
 
