@@ -67,19 +67,20 @@
 
 `def OCC(self, char, index, reverse=False) # 获取计算 Occ(a,i) 和 Occ_reverse(a,i) 的值`
 
-这里值得注意的是：*Occ(a,-1) = 0*
+ &nbsp; 这里值得注意的是：*Occ(a,-1) = 0*
 
-参数`reverse`判断是  *Occ(a,i)*  还是 *Occ_reverse(a,i)*
+ &nbsp; 参数`reverse`判断是  *Occ(a,i)*  还是 *Occ_reverse(a,i)*
 
 `def calculated_D(self, read) # 计算短序列的 D，用于修建遍历树并提升搜寻的速度`
 
-*D* 的存在可以大幅度缩小便利空间的范围
+ &nbsp; *D* 的存在可以大幅度缩小便利空间的范围
 
 `def get_D(self, index) # 获取 D 的数值 `
 
 `def InexRecur(self, read, i, z, k, l) #非精确搜索中使用的递归函数`
 
-
+<br/>
+<br/>
 
 按照参考文献1，分别实现的精确匹配和非精确匹配 ，即`def exact_match(self, read)`和`def inexact_match(self, read, z)`。
 
@@ -87,11 +88,12 @@
 
 根据参数`num_differences`判断使用精确还是非精确匹配，显然`num_differences=0`时使用精确匹配。
 
-环境参数`only_InexRecur`的设定可以强制使用非精确匹配算法实现精确匹配，显然此时`z=0`。
+环境参数`only_InexRecur`可以强制使用非精确匹配算法实现精确匹配，显然此时`z=0`。
 
 `def find_match(self, read, num_differences)`可以认为是**精确匹配 + 非精确匹配**。
 
-
+<br/>
+<br/>
 
 按照参考文献2中提及的算法2，同时实现精确匹配和非精确匹配，即`def all_match(self, read, z)`。
 
@@ -101,11 +103,12 @@
 
 `def find_match_2(self, read, num_differences)`可以认为是**精确/非精确匹配**。
 
+<br/>
+<br/>
 
+`def find_match(...)`和`def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
 
-`def find_match(...)`和``def find_match_2(...)`被封装到一起，即`def match(self, read, num_differences)`。
-
-环境参数`use_find_match`的设定选择使用`def find_match(...)`或者`def find_match_2(...)`。
+环境参数`use_find_match`选择使用`def find_match(...)`还是`def find_match_2(...)`。
 
 ### **2.Class OCC_COMPRESS 实现相关数据的压缩**
 
@@ -115,7 +118,8 @@
 
 `def decode(self, char, index) # 对数据进行解码，获取 Occ(a,i) 的值 `
 
-
+<br/>
+<br/>
 
 根据参考文献的表述，数据进行压缩的时候可使用不同的 *entry* 作为 *head*。
 
