@@ -1,7 +1,7 @@
 import bwt
 import algorithm
 
-reference =["GTG", "ACG"] # 不包含终止符 $
+reference =["ACGTX"] # 不包含终止符 $
 
 
 if __name__ == "__main__":
@@ -30,5 +30,8 @@ if __name__ == "__main__":
 
     print('********************** Sequence retrieval *************************')
 
-    print(algorithm.get_all_seq(len(reference)*2, fmd_index.data['B'], fmd_index.data['O'], fmd_index.data['C']))
+    print(algorithm.get_all_seq(len(reference)*2, fmd_index))
+    
+    # 对于空串，k = l = 0, s = len(T)-1
+    print(algorithm.backward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
     

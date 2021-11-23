@@ -16,6 +16,9 @@ def reference_array2str(reference_array):
 
         return reference_str
 
+
+
+
 # BWA 变换生成的 FM-index 数据
 class BWA_FM_index:
     # BWT B, the occurrence array O(a,i),  suffix array S(i)
@@ -28,7 +31,7 @@ class BWA_FM_index:
         C, Occ= [dict() for i in range(2)]
 
         # 创建一个无序不重复元素集
-        alphabet = { '$', 'A', 'C', 'G', 'T'} 
+        alphabet = { '$', 'A', 'C', 'G', 'T', 'X'} 
 
         # 初始化 C, Occ (C, Occ 是 dict) 
         for char in alphabet:
@@ -111,7 +114,7 @@ class BWA_FMD_index:
         C, Occ= [dict() for i in range(2)]
 
         # 创建一个无序不重复元素集
-        alphabet = { '$', 'A', 'C', 'G', 'T'} 
+        alphabet = { '$', 'A', 'C', 'G', 'T', 'X'} 
 
         # 初始化 C, Occ (C, Occ 是 dict) 
         for char in alphabet:
