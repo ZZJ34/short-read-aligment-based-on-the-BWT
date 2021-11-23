@@ -176,5 +176,7 @@ class BWA_FMD_index:
         return reference_list
 
     def Occ(self, char, index):
-        print(char)
-        print(index)
+        if index < 0:
+            return 0
+        else:
+            return self.data['O'][char][index]
