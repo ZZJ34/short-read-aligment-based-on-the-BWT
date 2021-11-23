@@ -1,7 +1,7 @@
 import bwt
 import algorithm
 
-reference =["ACG", "GTG"] # 不包含终止符 $
+reference =["ACGX", "GTG"] # 不包含终止符 $
 
 
 if __name__ == "__main__":
