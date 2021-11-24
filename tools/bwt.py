@@ -17,8 +17,6 @@ def reference_array2str(reference_array):
         return reference_str
 
 
-
-
 # BWA 变换生成的 FM-index 数据
 class BWA_FM_index:
     # BWT B, the occurrence array O(a,i),  suffix array S(i)

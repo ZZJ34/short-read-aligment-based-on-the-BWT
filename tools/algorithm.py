@@ -1,4 +1,6 @@
+import copy
 
+# 按照字典序排序
 symbols = ['$', 'A', 'C', 'G', 'T', 'X']
 
 reverse_dict={
@@ -61,6 +63,67 @@ def backward_extension(interval, symbol, all_data):
 def forward_extension(interval, symbol, all_data):
     return backward_extension(interval, reverse_dict[symbol], all_data)
 
+# Algorithm 5: Finding SMEMs
+# Input: String P and start position i0; 特殊定义 P[−1]=0, P[−1]=$
+# Output: Set of bi-intervals of SMEMs overlapping i0
+def super_MEM1(P, start_index, all_data):
+
+    # 数据准备
+    curr_list, prev_list, match_list = [list() for i in range(3)]
+
+    # 初始数据
+    [k, l, s] = [
+        all_data.data['C'][P[start_index]], 
+        all_data.data['C'][reverse_dict[P[start_index]]],
+        all_data.data['C'][symbols[symbols.index(P[start_index])+1]] - all_data.data['C'][P[start_index]]
+    ]
+
+    # 前向搜索
+    i = start_index + 1
+    while i <= len(P):
+        if i == len(P):
+            curr_list.append([k, l, s]) 
+        else:
+            [k_temp, l_temp, s_temp] = forward_extension([k, l, s], P[i], all_data)
+            if s_temp != s:
+                curr_list.append([k, l, s])
+            if s_temp == 0:
+                break
+            [k,l,s] = [k_temp, l_temp, s_temp]
+        i = i + 1
+
+    # 后向搜索
+    prev_list = copy.deepcopy(curr_list) # 深拷贝
+    i_temp= len(P)
+    i = start_index - 1
+    while i >= -1:
+        curr_list = []
+        s_temp_temp = -1
+        for [k, l, s] in prev_list:
+            [k_temp, l_temp, s_temp] = backward_extension([k, l, s], P[i] if i != -1 else '$', all_data)
+            
+            if s_temp == 0 or i == -1:
+                if len(curr_list) == 0 and (i+1) < (i_temp+1):
+                    i_temp = i
+                    match_list.append([k, l, s])
+            
+            if s_temp != 0 and s_temp != s_temp_temp:
+                s_temp_temp = s_temp
+                curr_list.append([k, l, s])
+        
+        if len(curr_list) == 0:
+            break
+
+        prev_list = copy.deepcopy(curr_list)
+
+        i = i - 1 
+
+    return match_list
+    
+
+    
+
+    
 
         
 
