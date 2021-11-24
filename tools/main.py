@@ -1,6 +1,6 @@
 import bwt
+import data
 import algorithm
-import copy
 
 # $, A, C, G, T, N/X 从 0 开始编码
 # 前向扩展 => W -> Wa
@@ -8,16 +8,19 @@ import copy
 # 对于空串，k = l = 0, s = len(T)-1
 
 
-reference =["ACGTX"] # 不包含终止符 $
+# reference =["ACGTX"] # 不包含终止符 $
 
 
 if __name__ == "__main__":
     print('hello, my bwa tools!')
 
-    fm_index = bwt.BWA_FM_index(reference)
 
+    
+    print('********************** DATA LOAD *************************')
+
+    reference = data.load_file('d:\\short-read-aligment-based-on-the-BWT\\tools\\my_ref.fa')
+    
     fmd_index = bwt.BWA_FMD_index(reference)
-
 
     print('********************** RESULT *************************')
 
@@ -28,20 +31,20 @@ if __name__ == "__main__":
 
     # print(fm_index.text)
 
-    print('B :', fmd_index.data['B'])
-    print('S :', fmd_index.data['S'])
-    print('C :', fmd_index.data['C'])
-    print('O :', fmd_index.data['O'])
+    # print('B :', fmd_index.data['B'])
+    # print('S :', fmd_index.data['S'])
+    # print('C :', fmd_index.data['C'])
+    # print('O :', fmd_index.data['O'])
 
-    print(fmd_index.text)
+    # print(fmd_index.text)
 
-    print('********************** Sequence retrieval *************************')
+    print('********************** ALGORITHM *************************')
 
     # print(algorithm.get_all_seq(len(reference)*2, fmd_index))
     
     # print(algorithm.backward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
     # print(algorithm.forward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
 
-    print(algorithm.super_MEM1("ACG", 1, fmd_index))
+    print(algorithm.super_MEM1("ACG", 0, fmd_index))
 
     
