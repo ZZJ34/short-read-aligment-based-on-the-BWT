@@ -51,7 +51,7 @@ if __name__ == "__main__":
     # print(algorithm.backward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
     # print(algorithm.forward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
 
-    # print(algorithm.super_MEM1("ACG", 0, fmd_index))
+    print(algorithm.super_MEM1("ACG", 1, fmd_index))
 
     data.data_store(fmd_index)
 

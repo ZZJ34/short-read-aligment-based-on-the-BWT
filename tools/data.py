@@ -63,7 +63,6 @@ def data_store_encode(all_data, interval=128):
                 Occ_str = Occ_str + '{:064b}'.format(all_data.Occ_n(symbol,interval*i-1))
             
             BWT_str = ''.join([ symbols_encode[item] for item in all_data.data['B_n'][(i-1)*interval:i*interval]])
-            print(len(Occ_str))
             data.append(Occ_str + BWT_str)
         else:
             Occ_str = ''
