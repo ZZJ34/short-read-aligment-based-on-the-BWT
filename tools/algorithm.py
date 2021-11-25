@@ -1,7 +1,7 @@
 import copy
 
 # 按照字典序排序
-symbols = ['$', 'A', 'C', 'G', 'T', 'X']
+
 
 reverse_dict={
     "A" : "T",
