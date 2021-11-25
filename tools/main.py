@@ -8,7 +8,7 @@ import algorithm
 # 对于空串，k = l = 0, s = len(T)-1
 
 
-# reference =["ACGTX"] # 不包含终止符 $
+# reference =["ACCGGAT"] # 不包含终止符 $
 
 
 if __name__ == "__main__":
@@ -20,7 +20,9 @@ if __name__ == "__main__":
 
     reference = data.load_file('d:\\short-read-aligment-based-on-the-BWT\\tools\\my_ref.fa')
     
-    fmd_index = bwt.BWA_FMD_index(reference)
+    # fmd_index = bwt.BWA_FMD_index(reference)
+
+    fmd_index = bwt.BWA_FMD_index_noend(reference)
 
     print('********************** RESULT *************************')
 
@@ -31,12 +33,16 @@ if __name__ == "__main__":
 
     # print(fm_index.text)
 
-    # print('B :', fmd_index.data['B'])
-    # print('S :', fmd_index.data['S'])
-    # print('C :', fmd_index.data['C'])
-    # print('O :', fmd_index.data['O'])
+    # print('B   :', fmd_index.data['B'])
+    # print('B_n :', fmd_index.data['B_n'])
+    # print('S   :', fmd_index.data['S'])
+    # print('C   :', fmd_index.data['C'])
+    # print('O   :', fmd_index.data['O'])
+    # print('O_n :', fmd_index.data['O_n'])
 
     # print(fmd_index.text)
+
+    print(len(fmd_index.data['B_n']))
 
     print('********************** ALGORITHM *************************')
 
@@ -45,6 +51,12 @@ if __name__ == "__main__":
     # print(algorithm.backward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
     # print(algorithm.forward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
 
-    print(algorithm.super_MEM1("ACG", 0, fmd_index))
+    # print(algorithm.super_MEM1("ACG", 0, fmd_index))
+
+    data.data_store(fmd_index)
+
+    data.data_store_encode(fmd_index)
+
+
 
     
