@@ -8,7 +8,7 @@ import algorithm
 # 对于空串，k = l = 0, s = len(T)-1
 
 
-reference =["ACCTTGA"] # 不包含终止符 $
+# reference =["ACCTTGA"] # 不包含终止符 $
 
 
 if __name__ == "__main__":
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     
     print('********************** DATA LOAD *************************')
 
-    # reference = data.load_file('d:\\short-read-aligment-based-on-the-BWT\\tools\\my_ref.fa')
+    reference = data.load_file('d:\\short-read-aligment-based-on-the-BWT\\tools\\my_ref.fa')
     
     # fmd_index = bwt.BWA_FMD_index(reference)
 
@@ -51,9 +51,10 @@ if __name__ == "__main__":
     # print(algorithm.backward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
     # print(algorithm.forward_extension([0, 0, len(fmd_index.text)-1], 'A', fmd_index))
 
-    print(algorithm.super_MEM1("ACTTG", 0, fmd_index))
+    # print(algorithm.super_MEM1("ACTTG", 0, fmd_index))
 
     data.data_store(fmd_index)
+
 
     data.data_store_encode(fmd_index)
 
